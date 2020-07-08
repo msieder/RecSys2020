@@ -17,19 +17,22 @@ def load_inital_dataframe(filepath:str) -> pd.DataFrame:
 def load_subsample(filepath:str) -> pd.DataFrame:
     df = pd.read_csv(filepath)
 
-    df['text_tokens'] = df['text_tokens'].str.split('\t')
+    df['text_tokens'] = df['text_tokens'].str.replace('\t', ' ')
+    df['hashtags'] = df['hashtags'].fillna('')
+    df['hashtags'] = df['hashtags'].str.replace('\t', ' ')
+
 
     def to_hex_list(x):
         output = str(x).split('\t')
     #     output = [int(val, 16) for val in str(x).split('\t')] 
         return output
 
-    cols_to_process = ['hashtags', 'present_media', 'present_links', 'present_domains']
+    cols_to_process = ['present_media', 'present_links', 'present_domains']
 
     for col in cols_to_process:  
         df[col] = df[col].apply(lambda x: to_hex_list(x) if isinstance(x, str)  else x)
         
-    cols_to_process = ['tweet_timestamp', 'engaging_user_account_creation', 'reply_timestamp', 'retweet_timestamp', 'retweet_with_comment_timestamp', 'like_timestamp']
+    cols_to_process = ['tweet_timestamp', 'engaging_user_account_creation', 'engaged_with_user_account_creation',  'reply_timestamp', 'retweet_timestamp', 'retweet_with_comment_timestamp', 'like_timestamp']
 
     for col in cols_to_process:  
         df[col] = df[col].apply(lambda x: pd.Timestamp(x, unit='s'))
