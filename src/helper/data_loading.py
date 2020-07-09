@@ -27,7 +27,9 @@ def load_subsample(filepath:str) -> pd.DataFrame:
     #     output = [int(val, 16) for val in str(x).split('\t')] 
         return output
 
-    cols_to_process = ['present_media', 'present_links', 'present_domains']
+    df["present_media"] = df["present_media"].apply(lambda x: to_hex_list(x) if isinstance(x, str)  else [])
+
+    cols_to_process = ['present_links', 'present_domains']
 
     for col in cols_to_process:  
         df[col] = df[col].apply(lambda x: to_hex_list(x) if isinstance(x, str)  else x)
