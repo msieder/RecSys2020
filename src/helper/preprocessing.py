@@ -19,7 +19,7 @@ def preprocess_dataset(df, pipeline_path, load=False) -> (np.ndarray, np.ndarray
     retweet_with_comment = df["retweet_with_comment_timestamp"].notnull().astype(int).to_numpy()
     like = df["like_timestamp"].notnull().astype(int).to_numpy()
 
-    response = np.hstack((reply, retweet, retweet_with_comment,like))
+    response = np.column_stack((reply, retweet, retweet_with_comment,like))
 
     # 2)
     if load:
